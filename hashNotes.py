@@ -15,7 +15,7 @@ words = ["apple", "book", "cat", "dog", "egypt", "france"]
 # MOST IMPORTANT:
 # This function must be deterministic
 
-def my_hash(s):
+def my_hash(s, limit):
     # take every character in the string, and convert character to number
     # Convert each character into UTF-8 numbers
     string_utf = s.encode()
@@ -24,8 +24,26 @@ def my_hash(s):
 
     for char in string_utf:
         total += char
-    return total
+        total &= 0xffffffff  # limit total to 32 bits
+    return total % limit
 
-print(my_hash('Hello'))
-print(my_hash('Hello'))
-print(my_hash('World'))
+# print(my_hash('Hello'))
+# print(my_hash('Hello'))
+# print(my_hash('World'))
+
+hash_table = [None] * 8
+
+hash_table_python = dict() # same as going {} for a hash table.
+
+# Add items to has_table using the my_hash function
+index = my_hash('card', len(hash_table))
+hash_table[index] = "Value for card"
+
+index = my_hash('apple', len(hash_table))
+hash_table[index] = "Value for apple"
+
+# Retrieve some items from has_table
+# Lets retrieve the value for "hello"
+index = my_hash("card", len(hash_table))
+print(hash_table[index])
+print(hash_table)
